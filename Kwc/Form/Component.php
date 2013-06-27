@@ -208,6 +208,17 @@ class Kwc_Form_Component extends Kwc_Abstract_Composite_Component
         return $this->_postData;
     }
 
+    /**
+     * Returns if the form was posted in the current request
+     */
+    public function isPosted()
+    {
+        if (!$this->_processed) {
+            throw new Kwf_Exception("Form '{$this->getData()->componentId}' has not yet been processed, processInput must be called");
+        }
+        return $this->_posted;
+    }
+
     public function getErrors()
     {
         if (!$this->_processed) {
@@ -257,7 +268,7 @@ class Kwc_Form_Component extends Kwc_Abstract_Composite_Component
         }
 
         if ($ret['showSuccess']) {
-            $ret['success'] = $this->getData()->getChildComponent('-success');
+            $ret['success'] = $this->getSuccessComponent();
         } else {
             foreach ($this->getData()->getChildComponents(array('generator' => 'child')) as $c) {
                 if ($c->id != 'success') {
